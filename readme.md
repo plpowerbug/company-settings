@@ -1,9 +1,6 @@
-Thought for 3 seconds### Company Settings Management System
+
 
 A comprehensive, configuration-driven settings management system for companies and users built with Next.js and React.
-
-
-
 
 
 ## Overview
