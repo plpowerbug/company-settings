@@ -1,0 +1,526 @@
+{
+  "profile": {
+    "name": "Achi Corporation",
+    "description": "Leading provider of innovative solutions",
+    "logo": "",
+    "industry": "technology",
+    "foundedYear": "2025",
+    "website": "https://example.com",
+    "companySize": "11-50",
+    "primaryColor": "#000000",
+    "secondaryColor": "#ffffff"
+  },
+  "notifications": {
+    "enableNotifications": false,
+    "emailDigestFrequency": "weekly",
+    "notifyOnUserSignup": true,
+    "notifyOnPaymentReceived": true,
+    "notifyOnSystemUpdates": true,
+    "notifyOnSecurityAlerts": true,
+    "marketingEmails": false
+  },
+  "security": {
+    "enableTwoFactorAuth": false,
+    "passwordExpiryDays": 90,
+    "sessionTimeoutMinutes": 60,
+    "ipRestriction": false,
+    "allowedIpAddresses": "",
+    "failedLoginAttempts": 5,
+    "securityLevel": "medium"
+  },
+  "data": {
+    "enableDataSharing": false,
+    "enableAnalytics": true,
+    "enableAutoBackup": false,
+    "dataRetentionPeriod": "1year",
+    "backupFrequency": "daily",
+    "backupTime": "00:00",
+    "encryptData": true,
+    "anonymizeUserData": false
+  },
+  "integrations": {
+    "enableSlackIntegration": false,
+    "slackWebhookUrl": "",
+    "enableGoogleAnalytics": false,
+    "googleAnalyticsId": "",
+    "enableZapier": false,
+    "enableCRM": false,
+    "crmProvider": "none",
+    "crmApiKey": "",
+    "enableSocialLogin": false,
+    "enabledSocialProviders": {
+      "google": false,
+      "facebook": false,
+      "twitter": false,
+      "github": false
+    }
+  },
+  "display": {
+    "defaultTheme": "system",
+    "enableCustomBranding": false,
+    "dateFormat": "MM/DD/YYYY",
+    "timeFormat": "12hour",
+    "defaultLanguage": "en",
+    "defaultTimezone": "UTC",
+    "showWelcomeMessage": true,
+    "compactMode": false
+  },
+  "operations": [
+    {
+      "type": "user.create",
+      "name": "User Created",
+      "description": "When a new user is created in the system",
+      "enabled": true,
+      "actions": [
+        {
+          "type": "log.activity",
+          "name": "Log Activity",
+          "description": "Record this activity in the system logs",
+          "config": {
+            "level": "info",
+            "includeDetails": true,
+            "retention": "90days"
+          },
+          "enabled": true
+        },
+        {
+          "type": "notification.email",
+          "name": "Email Notification",
+          "description": "Send an email notification",
+          "config": {
+            "template": "default",
+            "recipients": [],
+            "ccRecipients": [],
+            "subject": "",
+            "includeDetails": true
+          },
+          "enabled": true
+        },
+        {
+          "type": "analytics.track",
+          "name": "Track Analytics Event",
+          "description": "Record this event for analytics",
+          "config": {
+            "eventName": "",
+            "properties": {},
+            "includeUserData": true
+          },
+          "enabled": true
+        }
+      ]
+    },
+    {
+      "type": "user.update",
+      "name": "User Updated",
+      "description": "When a user profile is updated",
+      "enabled": true,
+      "actions": [
+        {
+          "type": "log.activity",
+          "name": "Log Activity",
+          "description": "Record this activity in the system logs",
+          "config": {
+            "level": "info",
+            "includeDetails": true,
+            "retention": "90days"
+          },
+          "enabled": true
+        },
+        {
+          "type": "notification.email",
+          "name": "Email Notification",
+          "description": "Send an email notification",
+          "config": {
+            "template": "default",
+            "recipients": [],
+            "ccRecipients": [],
+            "subject": "",
+            "includeDetails": true
+          },
+          "enabled": false
+        },
+        {
+          "type": "analytics.track",
+          "name": "Track Analytics Event",
+          "description": "Record this event for analytics",
+          "config": {
+            "eventName": "",
+            "properties": {},
+            "includeUserData": true
+          },
+          "enabled": true
+        }
+      ]
+    },
+    {
+      "type": "user.delete",
+      "name": "User Deleted",
+      "description": "When a user is deleted from the system",
+      "enabled": true,
+      "actions": [
+        {
+          "type": "log.activity",
+          "name": "Log Activity",
+          "description": "Record this activity in the system logs",
+          "config": {
+            "level": "info",
+            "includeDetails": true,
+            "retention": "90days"
+          },
+          "enabled": true
+        },
+        {
+          "type": "notification.email",
+          "name": "Email Notification",
+          "description": "Send an email notification",
+          "config": {
+            "template": "default",
+            "recipients": [],
+            "ccRecipients": [],
+            "subject": "",
+            "includeDetails": true
+          },
+          "enabled": false
+        },
+        {
+          "type": "analytics.track",
+          "name": "Track Analytics Event",
+          "description": "Record this event for analytics",
+          "config": {
+            "eventName": "",
+            "properties": {},
+            "includeUserData": true
+          },
+          "enabled": true
+        }
+      ]
+    },
+    {
+      "type": "payment.received",
+      "name": "Payment Received",
+      "description": "When a payment is successfully processed",
+      "enabled": true,
+      "actions": [
+        {
+          "type": "log.activity",
+          "name": "Log Activity",
+          "description": "Record this activity in the system logs",
+          "config": {
+            "level": "info",
+            "includeDetails": true,
+            "retention": "90days"
+          },
+          "enabled": true
+        },
+        {
+          "type": "notification.email",
+          "name": "Email Notification",
+          "description": "Send an email notification",
+          "config": {
+            "template": "default",
+            "recipients": [],
+            "ccRecipients": [],
+            "subject": "",
+            "includeDetails": true
+          },
+          "enabled": true
+        },
+        {
+          "type": "notification.slack",
+          "name": "Slack Notification",
+          "description": "Send a notification to Slack",
+          "config": {
+            "channel": "general",
+            "message": "",
+            "mentionUsers": [],
+            "includeDetails": true
+          },
+          "enabled": true
+        },
+        {
+          "type": "webhook.trigger",
+          "name": "Trigger Webhook",
+          "description": "Send data to an external webhook",
+          "config": {
+            "url": "",
+            "method": "POST",
+            "headers": {},
+            "includeFullPayload": true
+          },
+          "enabled": false
+        }
+      ]
+    },
+    {
+      "type": "payment.refunded",
+      "name": "Payment Refunded",
+      "description": "When a payment is refunded",
+      "enabled": true,
+      "actions": [
+        {
+          "type": "log.activity",
+          "name": "Log Activity",
+          "description": "Record this activity in the system logs",
+          "config": {
+            "level": "info",
+            "includeDetails": true,
+            "retention": "90days"
+          },
+          "enabled": true
+        },
+        {
+          "type": "notification.email",
+          "name": "Email Notification",
+          "description": "Send an email notification",
+          "config": {
+            "template": "default",
+            "recipients": [],
+            "ccRecipients": [],
+            "subject": "",
+            "includeDetails": true
+          },
+          "enabled": true
+        },
+        {
+          "type": "notification.slack",
+          "name": "Slack Notification",
+          "description": "Send a notification to Slack",
+          "config": {
+            "channel": "general",
+            "message": "",
+            "mentionUsers": [],
+            "includeDetails": true
+          },
+          "enabled": true
+        },
+        {
+          "type": "webhook.trigger",
+          "name": "Trigger Webhook",
+          "description": "Send data to an external webhook",
+          "config": {
+            "url": "",
+            "method": "POST",
+            "headers": {},
+            "includeFullPayload": true
+          },
+          "enabled": false
+        }
+      ]
+    },
+    {
+      "type": "document.created",
+      "name": "Document Created",
+      "description": "When a new document is created",
+      "enabled": true,
+      "actions": [
+        {
+          "type": "log.activity",
+          "name": "Log Activity",
+          "description": "Record this activity in the system logs",
+          "config": {
+            "level": "info",
+            "includeDetails": true,
+            "retention": "90days"
+          },
+          "enabled": true
+        },
+        {
+          "type": "notification.email",
+          "name": "Email Notification",
+          "description": "Send an email notification",
+          "config": {
+            "template": "default",
+            "recipients": [],
+            "ccRecipients": [],
+            "subject": "",
+            "includeDetails": true
+          },
+          "enabled": false
+        }
+      ]
+    },
+    {
+      "type": "document.shared",
+      "name": "Document Shared",
+      "description": "When a document is shared with others",
+      "enabled": true,
+      "actions": [
+        {
+          "type": "log.activity",
+          "name": "Log Activity",
+          "description": "Record this activity in the system logs",
+          "config": {
+            "level": "info",
+            "includeDetails": true,
+            "retention": "90days"
+          },
+          "enabled": true
+        },
+        {
+          "type": "notification.email",
+          "name": "Email Notification",
+          "description": "Send an email notification",
+          "config": {
+            "template": "default",
+            "recipients": [],
+            "ccRecipients": [],
+            "subject": "",
+            "includeDetails": true
+          },
+          "enabled": true
+        }
+      ]
+    },
+    {
+      "type": "login.success",
+      "name": "Successful Login",
+      "description": "When a user successfully logs in",
+      "enabled": true,
+      "actions": [
+        {
+          "type": "log.activity",
+          "name": "Log Activity",
+          "description": "Record this activity in the system logs",
+          "config": {
+            "level": "info",
+            "includeDetails": true,
+            "retention": "90days"
+          },
+          "enabled": true
+        }
+      ]
+    },
+    {
+      "type": "login.failed",
+      "name": "Failed Login Attempt",
+      "description": "When a login attempt fails",
+      "enabled": true,
+      "actions": [
+        {
+          "type": "log.activity",
+          "name": "Log Activity",
+          "description": "Record this activity in the system logs",
+          "config": {
+            "level": "info",
+            "includeDetails": true,
+            "retention": "90days"
+          },
+          "enabled": true
+        },
+        {
+          "type": "notification.email",
+          "name": "Email Notification",
+          "description": "Send an email notification",
+          "config": {
+            "template": "default",
+            "recipients": [],
+            "ccRecipients": [],
+            "subject": "",
+            "includeDetails": true
+          },
+          "enabled": true
+        },
+        {
+          "type": "notification.slack",
+          "name": "Slack Notification",
+          "description": "Send a notification to Slack",
+          "config": {
+            "channel": "general",
+            "message": "",
+            "mentionUsers": [],
+            "includeDetails": true
+          },
+          "enabled": true
+        }
+      ]
+    },
+    {
+      "type": "data.export",
+      "name": "Data Exported",
+      "description": "When data is exported from the system",
+      "enabled": true,
+      "actions": [
+        {
+          "type": "log.activity",
+          "name": "Log Activity",
+          "description": "Record this activity in the system logs",
+          "config": {
+            "level": "info",
+            "includeDetails": true,
+            "retention": "90days"
+          },
+          "enabled": true
+        },
+        {
+          "type": "notification.email",
+          "name": "Email Notification",
+          "description": "Send an email notification",
+          "config": {
+            "template": "default",
+            "recipients": [],
+            "ccRecipients": [],
+            "subject": "",
+            "includeDetails": true
+          },
+          "enabled": true
+        },
+        {
+          "type": "webhook.trigger",
+          "name": "Trigger Webhook",
+          "description": "Send data to an external webhook",
+          "config": {
+            "url": "",
+            "method": "POST",
+            "headers": {},
+            "includeFullPayload": true
+          },
+          "enabled": false
+        }
+      ]
+    },
+    {
+      "type": "data.import",
+      "name": "Data Imported",
+      "description": "When data is imported into the system",
+      "enabled": true,
+      "actions": [
+        {
+          "type": "log.activity",
+          "name": "Log Activity",
+          "description": "Record this activity in the system logs",
+          "config": {
+            "level": "info",
+            "includeDetails": true,
+            "retention": "90days"
+          },
+          "enabled": true
+        },
+        {
+          "type": "notification.email",
+          "name": "Email Notification",
+          "description": "Send an email notification",
+          "config": {
+            "template": "default",
+            "recipients": [],
+            "ccRecipients": [],
+            "subject": "",
+            "includeDetails": true
+          },
+          "enabled": true
+        },
+        {
+          "type": "webhook.trigger",
+          "name": "Trigger Webhook",
+          "description": "Send data to an external webhook",
+          "config": {
+            "url": "",
+            "method": "POST",
+            "headers": {},
+            "includeFullPayload": true
+          },
+          "enabled": false
+        }
+      ]
+    }
+  ]
+}

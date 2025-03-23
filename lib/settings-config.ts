@@ -113,8 +113,8 @@ export const companySettingsSchema: SettingsSchema = {
               type: "text",
               label: "Company Name",
               description: "This is your company's official name.",
-              placeholder: "Acme Inc.",
-              defaultValue: "Acme Corporation",
+              placeholder: "Achieva.",
+              defaultValue: "achieva Corporation",
               required: true,
               validation: {
                 minLength: 2,

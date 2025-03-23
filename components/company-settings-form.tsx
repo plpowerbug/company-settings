@@ -94,7 +94,7 @@ const integrationSchema = z.object({
 
 // Define the schema for display settings
 const displaySchema = z.object({
-  defaultTheme: z.enum(["light", "dark", "system"]).default("system"),
+  defaultTheme: z.enum(["light", "dark", "system"]).default("dark"),
   enableCustomBranding: z.boolean().default(false),
   dateFormat: z.enum(["MM/DD/YYYY", "DD/MM/YYYY", "YYYY-MM-DD"]).default("MM/DD/YYYY"),
   timeFormat: z.enum(["12hour", "24hour"]).default("12hour"),
@@ -143,7 +143,7 @@ export function CompanySettingsForm() {
     resolver: zodResolver(formSchema),
     defaultValues: initialData || {
       profile: {
-        name: "Acme Corporation",
+        name: "aaaaccchieva Corporation",
         description: "",
         logo: "",
         industry: "",

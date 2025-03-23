@@ -1,14 +1,64 @@
 "use client"
 
-import { Suspense } from "react"
+import { useState, useEffect } from "react"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { getCompanySettings } from "@/lib/settings-actions"
+import { getCompanySettings, updateCompanySettings } from "@/lib/settings-actions"
 import { DynamicSettingsForm } from "@/components/dynamic-settings-form"
 import { companySettingsSchema, personalSettingsSchema } from "@/lib/settings-config"
-import { updateCompanySettings } from "@/lib/settings-actions"
+import { OperationsSettings } from "@/components/operations-settings"
+import { generateDefaultOperations } from "@/lib/operations-config"
 
 export default function SettingsPage() {
+  const [settings, setSettings] = useState(null)
+  const [operations, setOperations] = useState([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    async function loadSettings() {
+      try {
+        const data = await getCompanySettings()
+        setSettings(data)
+
+        // Initialize operations if they don't exist
+        if (!data.operations) {
+          const defaultOps = generateDefaultOperations()
+          data.operations = defaultOps
+          await updateCompanySettings(data)
+          setOperations(defaultOps)
+        } else {
+          setOperations(data.operations)
+        }
+
+        setLoading(false)
+      } catch (error) {
+        console.error("Failed to load settings:", error)
+        setLoading(false)
+      }
+    }
+
+    loadSettings()
+  }, [])
+
+  const handleUpdateSettings = async (values) => {
+    try {
+      await updateCompanySettings(values)
+      setSettings(values)
+      return { success: true }
+    } catch (error) {
+      console.error("Failed to update settings:", error)
+      return { success: false }
+    }
+  }
+
+  const handleUpdateUserSettings = async (values) => {
+    // In a real app, this would update the user's settings in the database
+    console.log("Updating user settings:", values)
+    // For demo purposes, we'll just wait a bit
+    await new Promise((resolve) => setTimeout(resolve, 1000))
+    return { success: true }
+  }
+
   return (
     <div className="container py-10">
       <div className="mx-auto max-w-5xl space-y-6">
@@ -18,87 +68,75 @@ export default function SettingsPage() {
         </div>
 
         <Tabs defaultValue="company" className="w-full">
-          <TabsList className="grid w-full grid-cols-2">
+          <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="company">Company Settings</TabsTrigger>
             <TabsTrigger value="personal">Personal Settings</TabsTrigger>
+            <TabsTrigger value="operations">Operations Settings</TabsTrigger>
           </TabsList>
 
           <TabsContent value="company" className="mt-6">
-            <Suspense fallback={<SettingsFormSkeleton />}>
-              <CompanySettingsTab />
-            </Suspense>
+            {loading || !settings ? (
+              <SettingsFormSkeleton />
+            ) : (
+              <DynamicSettingsForm
+                schema={companySettingsSchema}
+                initialData={settings}
+                onSubmit={handleUpdateSettings}
+              />
+            )}
           </TabsContent>
 
           <TabsContent value="personal" className="mt-6">
-            <Suspense fallback={<SettingsFormSkeleton />}>
-              <PersonalSettingsTab />
-            </Suspense>
+            {loading ? (
+              <SettingsFormSkeleton />
+            ) : (
+              <DynamicSettingsForm
+                schema={personalSettingsSchema}
+                initialData={{
+                  preferences: {
+                    theme: "dark",
+                    fontSize: "medium",
+                    language: "en",
+                    timezone: "America/New_York",
+                    dateFormat: "MM/DD/YYYY",
+                    timeFormat: "12hour",
+                    firstDayOfWeek: "sunday",
+                    notifications: {
+                      enabled: true,
+                      email: true,
+                      browser: true,
+                      mobile: false,
+                      mentions: true,
+                      comments: true,
+                      updates: false,
+                      marketing: false,
+                      quietHoursEnabled: false,
+                      quietHoursStart: "22:00",
+                      quietHoursEnd: "07:00",
+                    },
+                    accessibility: {
+                      screenReader: false,
+                      keyboardNavigation: true,
+                      contrastMode: "normal",
+                      animationSpeed: 100,
+                    },
+                  },
+                }}
+                onSubmit={handleUpdateUserSettings}
+              />
+            )}
+          </TabsContent>
+
+          <TabsContent value="operations" className="mt-6">
+            {loading ? (
+              <SettingsFormSkeleton />
+            ) : (
+              <OperationsSettings operations={operations} onUpdate={() => window.location.reload()} />
+            )}
           </TabsContent>
         </Tabs>
       </div>
     </div>
-  )
-}
-
-// Update the CompanySettingsTab function to properly handle the form submission
-async function CompanySettingsTab() {
-  const settings = await getCompanySettings()
-
-  const updateSettings = async (values: any) => {
-    "use server"
-    // Ensure we're properly saving the settings
-    await updateCompanySettings(values)
-    return { success: true }
-  }
-
-  return <DynamicSettingsForm schema={companySettingsSchema} initialData={settings} onSubmit={updateSettings} />
-}
-
-// Update the PersonalSettingsTab function to properly handle the form submission
-async function PersonalSettingsTab() {
-  // In a real app, this would fetch the user's personal settings
-  const userSettings = {
-    preferences: {
-      theme: "system",
-      fontSize: "medium",
-      language: "en",
-      timezone: "America/New_York",
-      dateFormat: "MM/DD/YYYY",
-      timeFormat: "12hour",
-      firstDayOfWeek: "sunday",
-      notifications: {
-        enabled: true,
-        email: true,
-        browser: true,
-        mobile: false,
-        mentions: true,
-        comments: true,
-        updates: false,
-        marketing: false,
-        quietHoursEnabled: false,
-        quietHoursStart: "22:00",
-        quietHoursEnd: "07:00",
-      },
-      accessibility: {
-        screenReader: false,
-        keyboardNavigation: true,
-        contrastMode: "normal",
-        animationSpeed: 100,
-      },
-    },
-  }
-
-  const updateUserSettings = async (values: any) => {
-    "use server"
-    // In a real app, this would update the user's settings in the database
-    console.log("Updating user settings:", values)
-    // For demo purposes, we'll just wait a bit
-    await new Promise((resolve) => setTimeout(resolve, 1000))
-    return { success: true }
-  }
-
-  return (
-    <DynamicSettingsForm schema={personalSettingsSchema} initialData={userSettings} onSubmit={updateUserSettings} />
   )
 }
 

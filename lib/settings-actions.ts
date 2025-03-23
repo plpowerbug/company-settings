@@ -30,7 +30,7 @@ export async function getCompanySettings() {
       // If file doesn't exist or can't be parsed, return default settings
       return {
         profile: {
-          name: "Acme Corporation",
+          name: "Achieva ai",
           description: "Leading provider of innovative solutions",
           logo: "",
           industry: "technology",
