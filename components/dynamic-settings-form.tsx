@@ -43,12 +43,12 @@ export function DynamicSettingsForm({ schema, initialData, onSubmit }: DynamicSe
   const { toast } = useToast()
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
-  const [activeTab, setActiveTab] = useState(schema.tabs[0]?.id || "")
   const [filePreviews, setFilePreviews] = useState<Record<string, string | null>>({})
   const [fileInputValue, setFileInputValue] = useState<Record<string, string | null>>({})
 
   // Collect all fields from all sections in all tabs
-  const allFields: FieldConfig[] = schema.tabs.flatMap((tab) => tab.sections.flatMap((section) => section.fields))
+  const allFields: FieldConfig[] = schema.sections.flatMap((SectionConfig) => SectionConfig.fields);
+
 
   // Create a Zod schema from all fields
   const formSchema = createZodSchema(allFields)
@@ -559,21 +559,13 @@ export function DynamicSettingsForm({ schema, initialData, onSubmit }: DynamicSe
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-8">
-        <Tabs defaultValue={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 mb-4">
-            {schema.tabs.map((tab) => {
-              const Icon = tab.icon ? getIconByName(tab.icon) : null
-              return (
-                <TabsTrigger key={tab.id} value={tab.id}>
-                  {Icon && <Icon className="mr-2 h-4 w-4" />}
-                  {tab.title}
-                </TabsTrigger>
-              )
-            })}
-          </TabsList>
-
-          {schema.tabs.map((tab) => renderTab(tab))}
-        </Tabs>
+          {schema.sections.map((SectionConfig) => {
+            return (
+              <div key={SectionConfig.id} >
+                {renderSection(SectionConfig)}
+              </div>
+            );
+          })}
 
         <div className="flex justify-end">
           <Button type="submit" disabled={isLoading}>

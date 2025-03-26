@@ -445,7 +445,54 @@ export function OperationsSettings({ operations, onUpdate }: OperationsSettingsP
             </div>
           </div>
         )
-
+        case "notification.whatsapp":
+          return (
+            <div className="space-y-4 mt-4">
+              <div className="space-y-2">
+                <label className="text-sm font-medium">WhatsApp Template</label>
+                <Select
+                  defaultValue={action.config.template || "default"}
+                  onValueChange={(value) => updateActionConfig("template", value)}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select template" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="default">Default Template</SelectItem>
+                    <SelectItem value="minimal">Minimal</SelectItem>
+                    <SelectItem value="detailed">Detailed</SelectItem>
+                    <SelectItem value="branded">Branded</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Recipients (comma separated)</label>
+                <Input
+                  placeholder="+1234567890, +0987654321"
+                  defaultValue={Array.isArray(action.config.recipients) ? action.config.recipients.join(", ") : ""}
+                  onChange={(e) =>
+                    updateActionConfig(
+                      "recipients",
+                      e.target.value.split(",").map((phone) => phone.trim()),
+                    )
+                  }
+                />
+              </div>
+              <div className="flex items-center space-x-2">
+                <Checkbox
+                  id={`include-details-${operationIndex}-${actionIndex}`}
+                  checked={action.config.includeDetails}
+                  onCheckedChange={(checked) => updateActionConfig("includeDetails", checked)}
+                />
+                <label
+                  htmlFor={`include-details-${operationIndex}-${actionIndex}`}
+                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                >
+                  Include operation details in message
+                </label>
+              </div>
+            </div>
+          )
       default:
         return (
           <div className="p-4 border rounded-md bg-muted mt-4">
@@ -597,6 +644,7 @@ export function OperationsSettings({ operations, onUpdate }: OperationsSettingsP
                   <SelectItem value="notification.email">Email Notification</SelectItem>
                   <SelectItem value="notification.slack">Slack Notification</SelectItem>
                   <SelectItem value="notification.sms">SMS Notification</SelectItem>
+                  <SelectItem value="notification.whatsapp">WhatsApp Notification</SelectItem>
                   <SelectItem value="webhook.trigger">Trigger Webhook</SelectItem>
                   <SelectItem value="log.activity">Log Activity</SelectItem>
                   <SelectItem value="analytics.track">Track Analytics Event</SelectItem>

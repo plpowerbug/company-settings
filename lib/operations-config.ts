@@ -21,6 +21,7 @@ export type ActionType =
   | "log.activity"
   | "analytics.track"
   | "automation.workflow"
+  | "notification.whatsapp"
 
 // Define the structure for an action configuration
 export interface ActionConfig {
@@ -115,6 +116,17 @@ export const defaultActionConfigs: Record<ActionType, Omit<ActionConfig, "enable
       inputData: {},
       runAsynchronously: true,
     },
+  },
+  "notification.whatsapp": {
+    type: "notification.whatsapp",
+    name: "WhatsApp Notification",
+    description: "Send a notification via WhatsApp",
+    config: {
+      "template": "default",              // Optional: template name for the message
+      "recipients": [],                   // List of phone numbers (in international format)
+      "message": "",                      // Message body (plain text or template variables)
+      "includeDetails": false             // Whether to include detailed payload or metadata
+    }
   },
 }
 

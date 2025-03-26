@@ -96,6 +96,7 @@
           },
           "enabled": true
         },
+        
         {
           "type": "analytics.track",
           "name": "Track Analytics Event",
@@ -368,6 +369,17 @@
             "includeDetails": true
           },
           "enabled": true
+        },
+        {
+          "type": "notification.whatsapp",
+          "name": "WhatsApp Notification",
+          "description": "Send a notification via WhatsApp",
+          "config": {
+            "template": "default",              
+            "recipients": [],                   
+            "message": "",                     
+            "includeDetails": false            
+          }
         }
       ]
     },

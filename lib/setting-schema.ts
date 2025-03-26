@@ -124,7 +124,7 @@ export interface SettingsSchema {
   id: string
   title: string
   description?: string
-  tabs: TabConfig[]
+  sections: SectionConfig[]
 }
 
 // Helper function to create a Zod schema from field config
