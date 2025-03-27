@@ -1,10 +1,10 @@
 {
   "profile": {
-    "name": "Achi Corporation",
+    "name": "Achieva ai",
     "description": "Leading provider of innovative solutions",
     "logo": "",
     "industry": "technology",
-    "foundedYear": "2025",
+    "foundedYear": "2010",
     "website": "https://example.com",
     "companySize": "11-50",
     "primaryColor": "#000000",
@@ -67,468 +67,720 @@
   },
   "operations": [
     {
-      "type": "user.create",
-      "name": "User Created",
-      "description": "When a new user is created in the system",
+      "type": "notification.email",
+      "name": "Email Notifications",
+      "description": "Send notifications via email",
       "enabled": true,
+      "config": {
+        "recipients": [],
+        "ccRecipients": [],
+        "bccRecipients": [],
+        "fromName": "System Notifications",
+        "replyTo": "",
+        "attachments": false
+      },
       "actions": [
         {
-          "type": "log.activity",
-          "name": "Log Activity",
-          "description": "Record this activity in the system logs",
+          "type": "user.created",
+          "name": "User Created",
+          "description": "When a new user is created in the system",
           "config": {
-            "level": "info",
-            "includeDetails": true,
-            "retention": "90days"
+            "includeUserDetails": true,
+            "notifyAdmin": true,
+            "welcomeNewUser": true,
+            "template": "user-created",
+            "subject": "New User Created"
           },
           "enabled": true
         },
         {
-          "type": "notification.email",
-          "name": "Email Notification",
-          "description": "Send an email notification",
+          "type": "user.updated",
+          "name": "User Updated",
+          "description": "When a user profile is updated",
           "config": {
-            "template": "default",
-            "recipients": [],
-            "ccRecipients": [],
-            "subject": "",
-            "includeDetails": true
-          },
-          "enabled": true
-        },
-        
-        {
-          "type": "analytics.track",
-          "name": "Track Analytics Event",
-          "description": "Record this event for analytics",
-          "config": {
-            "eventName": "",
-            "properties": {},
-            "includeUserData": true
-          },
-          "enabled": true
-        }
-      ]
-    },
-    {
-      "type": "user.update",
-      "name": "User Updated",
-      "description": "When a user profile is updated",
-      "enabled": true,
-      "actions": [
-        {
-          "type": "log.activity",
-          "name": "Log Activity",
-          "description": "Record this activity in the system logs",
-          "config": {
-            "level": "info",
-            "includeDetails": true,
-            "retention": "90days"
+            "includeUserDetails": true,
+            "notifyAdmin": true,
+            "highlightChanges": true,
+            "template": "user-updated",
+            "subject": "User Profile Updated"
           },
           "enabled": true
         },
         {
-          "type": "notification.email",
-          "name": "Email Notification",
-          "description": "Send an email notification",
+          "type": "user.deleted",
+          "name": "User Deleted",
+          "description": "When a user is deleted from the system",
           "config": {
-            "template": "default",
-            "recipients": [],
-            "ccRecipients": [],
-            "subject": "",
-            "includeDetails": true
-          },
-          "enabled": false
-        },
-        {
-          "type": "analytics.track",
-          "name": "Track Analytics Event",
-          "description": "Record this event for analytics",
-          "config": {
-            "eventName": "",
-            "properties": {},
-            "includeUserData": true
-          },
-          "enabled": true
-        }
-      ]
-    },
-    {
-      "type": "user.delete",
-      "name": "User Deleted",
-      "description": "When a user is deleted from the system",
-      "enabled": true,
-      "actions": [
-        {
-          "type": "log.activity",
-          "name": "Log Activity",
-          "description": "Record this activity in the system logs",
-          "config": {
-            "level": "info",
-            "includeDetails": true,
-            "retention": "90days"
+            "includeUserDetails": true,
+            "notifyAdmin": true,
+            "requestFeedback": true,
+            "template": "user-deleted",
+            "subject": "User Account Deleted"
           },
           "enabled": true
         },
         {
-          "type": "notification.email",
-          "name": "Email Notification",
-          "description": "Send an email notification",
+          "type": "payment.received",
+          "name": "Payment Received",
+          "description": "When a payment is successfully processed",
           "config": {
-            "template": "default",
-            "recipients": [],
-            "ccRecipients": [],
-            "subject": "",
-            "includeDetails": true
-          },
-          "enabled": false
-        },
-        {
-          "type": "analytics.track",
-          "name": "Track Analytics Event",
-          "description": "Record this event for analytics",
-          "config": {
-            "eventName": "",
-            "properties": {},
-            "includeUserData": true
-          },
-          "enabled": true
-        }
-      ]
-    },
-    {
-      "type": "payment.received",
-      "name": "Payment Received",
-      "description": "When a payment is successfully processed",
-      "enabled": true,
-      "actions": [
-        {
-          "type": "log.activity",
-          "name": "Log Activity",
-          "description": "Record this activity in the system logs",
-          "config": {
-            "level": "info",
-            "includeDetails": true,
-            "retention": "90days"
+            "includePaymentDetails": true,
+            "sendReceipt": true,
+            "template": "payment-received",
+            "subject": "Payment Received"
           },
           "enabled": true
         },
         {
-          "type": "notification.email",
-          "name": "Email Notification",
-          "description": "Send an email notification",
+          "type": "payment.refunded",
+          "name": "Payment Refunded",
+          "description": "When a payment is refunded",
           "config": {
-            "template": "default",
-            "recipients": [],
-            "ccRecipients": [],
-            "subject": "",
-            "includeDetails": true
+            "includeRefundDetails": true,
+            "sendRefundConfirmation": true,
+            "template": "payment-refunded",
+            "subject": "Payment Refunded"
           },
           "enabled": true
         },
         {
-          "type": "notification.slack",
-          "name": "Slack Notification",
-          "description": "Send a notification to Slack",
+          "type": "login.failed",
+          "name": "Failed Login Attempt",
+          "description": "When a login attempt fails",
           "config": {
-            "channel": "general",
-            "message": "",
-            "mentionUsers": [],
-            "includeDetails": true
+            "includeAttemptDetails": true,
+            "includeLocationInfo": true,
+            "template": "login-failed",
+            "subject": "Failed Login Attempt"
           },
           "enabled": true
         },
         {
-          "type": "webhook.trigger",
-          "name": "Trigger Webhook",
-          "description": "Send data to an external webhook",
+          "type": "document.shared",
+          "name": "Document Shared",
+          "description": "When a document is shared with others",
           "config": {
-            "url": "",
-            "method": "POST",
-            "headers": {},
-            "includeFullPayload": true
+            "includeDocumentDetails": true,
+            "includeShareDetails": true,
+            "template": "document-shared",
+            "subject": "Document Shared With You"
+          },
+          "enabled": true
+        },
+        {
+          "type": "custom.event",
+          "name": "Custom Event",
+          "description": "A custom event defined by the user",
+          "config": {
+            "customMessage": "",
+            "template": "custom",
+            "subject": "Custom Notification"
           },
           "enabled": false
         }
       ]
     },
     {
-      "type": "payment.refunded",
-      "name": "Payment Refunded",
-      "description": "When a payment is refunded",
-      "enabled": true,
+      "type": "notification.whatsapp",
+      "name": "WhatsApp Notifications",
+      "description": "Send notifications via WhatsApp",
+      "enabled": false,
+      "config": {
+        "phoneNumbers": [],
+        "includeMedia": false,
+        "priority": "normal"
+      },
       "actions": [
         {
-          "type": "log.activity",
-          "name": "Log Activity",
-          "description": "Record this activity in the system logs",
+          "type": "user.created",
+          "name": "User Created",
+          "description": "When a new user is created in the system",
           "config": {
-            "level": "info",
-            "includeDetails": true,
-            "retention": "90days"
+            "includeUserDetails": true,
+            "notifyAdmin": true,
+            "welcomeNewUser": true,
+            "template": "user-created",
+            "subject": "New User Created"
           },
-          "enabled": true
+          "enabled": false
         },
         {
-          "type": "notification.email",
-          "name": "Email Notification",
-          "description": "Send an email notification",
+          "type": "user.updated",
+          "name": "User Updated",
+          "description": "When a user profile is updated",
           "config": {
-            "template": "default",
-            "recipients": [],
-            "ccRecipients": [],
-            "subject": "",
-            "includeDetails": true
+            "includeUserDetails": true,
+            "notifyAdmin": true,
+            "highlightChanges": true,
+            "template": "user-updated",
+            "subject": "User Profile Updated"
           },
-          "enabled": true
+          "enabled": false
         },
         {
-          "type": "notification.slack",
-          "name": "Slack Notification",
-          "description": "Send a notification to Slack",
+          "type": "user.deleted",
+          "name": "User Deleted",
+          "description": "When a user is deleted from the system",
           "config": {
-            "channel": "general",
-            "message": "",
-            "mentionUsers": [],
-            "includeDetails": true
+            "includeUserDetails": true,
+            "notifyAdmin": true,
+            "requestFeedback": true,
+            "template": "user-deleted",
+            "subject": "User Account Deleted"
           },
-          "enabled": true
+          "enabled": false
         },
         {
-          "type": "webhook.trigger",
-          "name": "Trigger Webhook",
-          "description": "Send data to an external webhook",
+          "type": "login.failed",
+          "name": "Failed Login Attempt",
+          "description": "When a login attempt fails",
           "config": {
-            "url": "",
-            "method": "POST",
-            "headers": {},
-            "includeFullPayload": true
+            "includeAttemptDetails": true,
+            "includeLocationInfo": true,
+            "template": "login-failed",
+            "subject": "Failed Login Attempt"
+          },
+          "enabled": false
+        },
+        {
+          "type": "document.shared",
+          "name": "Document Shared",
+          "description": "When a document is shared with others",
+          "config": {
+            "includeDocumentDetails": true,
+            "includeShareDetails": true,
+            "template": "document-shared",
+            "subject": "Document Shared With You"
+          },
+          "enabled": false
+        },
+        {
+          "type": "custom.event",
+          "name": "Custom Event",
+          "description": "A custom event defined by the user",
+          "config": {
+            "customMessage": "",
+            "template": "custom",
+            "subject": "Custom Notification"
           },
           "enabled": false
         }
       ]
     },
     {
-      "type": "document.created",
-      "name": "Document Created",
-      "description": "When a new document is created",
-      "enabled": true,
+      "type": "notification.sms",
+      "name": "SMS Notifications",
+      "description": "Send notifications via SMS",
+      "enabled": false,
+      "config": {
+        "phoneNumbers": [],
+        "senderId": "System",
+        "priority": "normal"
+      },
       "actions": [
         {
-          "type": "log.activity",
-          "name": "Log Activity",
-          "description": "Record this activity in the system logs",
+          "type": "user.created",
+          "name": "User Created",
+          "description": "When a new user is created in the system",
           "config": {
-            "level": "info",
-            "includeDetails": true,
-            "retention": "90days"
+            "includeUserDetails": true,
+            "notifyAdmin": true,
+            "welcomeNewUser": true,
+            "template": "user-created",
+            "subject": "New User Created"
+          },
+          "enabled": false
+        },
+        {
+          "type": "user.updated",
+          "name": "User Updated",
+          "description": "When a user profile is updated",
+          "config": {
+            "includeUserDetails": true,
+            "notifyAdmin": true,
+            "highlightChanges": true,
+            "template": "user-updated",
+            "subject": "User Profile Updated"
+          },
+          "enabled": false
+        },
+        {
+          "type": "user.deleted",
+          "name": "User Deleted",
+          "description": "When a user is deleted from the system",
+          "config": {
+            "includeUserDetails": true,
+            "notifyAdmin": true,
+            "requestFeedback": true,
+            "template": "user-deleted",
+            "subject": "User Account Deleted"
+          },
+          "enabled": false
+        },
+        {
+          "type": "payment.received",
+          "name": "Payment Received",
+          "description": "When a payment is successfully processed",
+          "config": {
+            "includePaymentDetails": true,
+            "sendReceipt": true,
+            "template": "payment-received",
+            "subject": "Payment Received"
           },
           "enabled": true
         },
         {
-          "type": "notification.email",
-          "name": "Email Notification",
-          "description": "Send an email notification",
+          "type": "payment.refunded",
+          "name": "Payment Refunded",
+          "description": "When a payment is refunded",
           "config": {
-            "template": "default",
-            "recipients": [],
-            "ccRecipients": [],
-            "subject": "",
-            "includeDetails": true
+            "includeRefundDetails": true,
+            "sendRefundConfirmation": true,
+            "template": "payment-refunded",
+            "subject": "Payment Refunded"
+          },
+          "enabled": true
+        },
+        {
+          "type": "login.failed",
+          "name": "Failed Login Attempt",
+          "description": "When a login attempt fails",
+          "config": {
+            "includeAttemptDetails": true,
+            "includeLocationInfo": true,
+            "template": "login-failed",
+            "subject": "Failed Login Attempt"
+          },
+          "enabled": false
+        },
+        {
+          "type": "custom.event",
+          "name": "Custom Event",
+          "description": "A custom event defined by the user",
+          "config": {
+            "customMessage": "",
+            "template": "custom",
+            "subject": "Custom Notification"
           },
           "enabled": false
         }
       ]
     },
     {
-      "type": "document.shared",
-      "name": "Document Shared",
-      "description": "When a document is shared with others",
-      "enabled": true,
+      "type": "notification.slack",
+      "name": "Slack Notifications",
+      "description": "Send notifications to Slack channels",
+      "enabled": false,
+      "config": {
+        "channel": "general",
+        "mentionUsers": [],
+        "useThreads": true,
+        "includeAttachments": true
+      },
       "actions": [
         {
-          "type": "log.activity",
-          "name": "Log Activity",
-          "description": "Record this activity in the system logs",
+          "type": "user.created",
+          "name": "User Created",
+          "description": "When a new user is created in the system",
           "config": {
-            "level": "info",
-            "includeDetails": true,
-            "retention": "90days"
+            "includeUserDetails": true,
+            "notifyAdmin": true,
+            "welcomeNewUser": true,
+            "template": "user-created",
+            "subject": "New User Created"
           },
-          "enabled": true
+          "enabled": false
         },
         {
-          "type": "notification.email",
-          "name": "Email Notification",
-          "description": "Send an email notification",
+          "type": "user.updated",
+          "name": "User Updated",
+          "description": "When a user profile is updated",
           "config": {
-            "template": "default",
-            "recipients": [],
-            "ccRecipients": [],
-            "subject": "",
-            "includeDetails": true
+            "includeUserDetails": true,
+            "notifyAdmin": true,
+            "highlightChanges": true,
+            "template": "user-updated",
+            "subject": "User Profile Updated"
           },
-          "enabled": true
+          "enabled": false
         },
         {
-          "type": "notification.whatsapp",
-          "name": "WhatsApp Notification",
-          "description": "Send a notification via WhatsApp",
+          "type": "user.deleted",
+          "name": "User Deleted",
+          "description": "When a user is deleted from the system",
           "config": {
-            "template": "default",              
-            "recipients": [],                   
-            "message": "",                     
-            "includeDetails": false            
-          }
-        }
-      ]
-    },
-    {
-      "type": "login.success",
-      "name": "Successful Login",
-      "description": "When a user successfully logs in",
-      "enabled": true,
-      "actions": [
-        {
-          "type": "log.activity",
-          "name": "Log Activity",
-          "description": "Record this activity in the system logs",
-          "config": {
-            "level": "info",
-            "includeDetails": true,
-            "retention": "90days"
+            "includeUserDetails": true,
+            "notifyAdmin": true,
+            "requestFeedback": true,
+            "template": "user-deleted",
+            "subject": "User Account Deleted"
           },
-          "enabled": true
-        }
-      ]
-    },
-    {
-      "type": "login.failed",
-      "name": "Failed Login Attempt",
-      "description": "When a login attempt fails",
-      "enabled": true,
-      "actions": [
-        {
-          "type": "log.activity",
-          "name": "Log Activity",
-          "description": "Record this activity in the system logs",
-          "config": {
-            "level": "info",
-            "includeDetails": true,
-            "retention": "90days"
-          },
-          "enabled": true
+          "enabled": false
         },
         {
-          "type": "notification.email",
-          "name": "Email Notification",
-          "description": "Send an email notification",
+          "type": "login.failed",
+          "name": "Failed Login Attempt",
+          "description": "When a login attempt fails",
           "config": {
-            "template": "default",
-            "recipients": [],
-            "ccRecipients": [],
-            "subject": "",
-            "includeDetails": true
+            "includeAttemptDetails": true,
+            "includeLocationInfo": true,
+            "template": "login-failed",
+            "subject": "Failed Login Attempt"
           },
-          "enabled": true
+          "enabled": false
         },
         {
-          "type": "notification.slack",
-          "name": "Slack Notification",
-          "description": "Send a notification to Slack",
+          "type": "custom.event",
+          "name": "Custom Event",
+          "description": "A custom event defined by the user",
           "config": {
-            "channel": "general",
-            "message": "",
-            "mentionUsers": [],
-            "includeDetails": true
-          },
-          "enabled": true
-        }
-      ]
-    },
-    {
-      "type": "data.export",
-      "name": "Data Exported",
-      "description": "When data is exported from the system",
-      "enabled": true,
-      "actions": [
-        {
-          "type": "log.activity",
-          "name": "Log Activity",
-          "description": "Record this activity in the system logs",
-          "config": {
-            "level": "info",
-            "includeDetails": true,
-            "retention": "90days"
-          },
-          "enabled": true
-        },
-        {
-          "type": "notification.email",
-          "name": "Email Notification",
-          "description": "Send an email notification",
-          "config": {
-            "template": "default",
-            "recipients": [],
-            "ccRecipients": [],
-            "subject": "",
-            "includeDetails": true
-          },
-          "enabled": true
-        },
-        {
-          "type": "webhook.trigger",
-          "name": "Trigger Webhook",
-          "description": "Send data to an external webhook",
-          "config": {
-            "url": "",
-            "method": "POST",
-            "headers": {},
-            "includeFullPayload": true
+            "customMessage": "",
+            "template": "custom",
+            "subject": "Custom Notification"
           },
           "enabled": false
         }
       ]
     },
     {
-      "type": "data.import",
-      "name": "Data Imported",
-      "description": "When data is imported into the system",
-      "enabled": true,
+      "type": "webhook.trigger",
+      "name": "Webhook Triggers",
+      "description": "Send data to external webhooks",
+      "enabled": false,
+      "config": {
+        "url": "",
+        "method": "POST",
+        "headers": {},
+        "includeFullPayload": true,
+        "retryOnFailure": true
+      },
       "actions": [
         {
-          "type": "log.activity",
-          "name": "Log Activity",
-          "description": "Record this activity in the system logs",
+          "type": "user.created",
+          "name": "User Created",
+          "description": "When a new user is created in the system",
           "config": {
-            "level": "info",
-            "includeDetails": true,
-            "retention": "90days"
+            "includeUserDetails": true,
+            "notifyAdmin": true,
+            "welcomeNewUser": true,
+            "template": "user-created",
+            "subject": "New User Created"
+          },
+          "enabled": false
+        },
+        {
+          "type": "user.updated",
+          "name": "User Updated",
+          "description": "When a user profile is updated",
+          "config": {
+            "includeUserDetails": true,
+            "notifyAdmin": true,
+            "highlightChanges": true,
+            "template": "user-updated",
+            "subject": "User Profile Updated"
+          },
+          "enabled": false
+        },
+        {
+          "type": "user.deleted",
+          "name": "User Deleted",
+          "description": "When a user is deleted from the system",
+          "config": {
+            "includeUserDetails": true,
+            "notifyAdmin": true,
+            "requestFeedback": true,
+            "template": "user-deleted",
+            "subject": "User Account Deleted"
+          },
+          "enabled": false
+        },
+        {
+          "type": "custom.event",
+          "name": "Custom Event",
+          "description": "A custom event defined by the user",
+          "config": {
+            "customMessage": "",
+            "template": "custom",
+            "subject": "Custom Notification"
+          },
+          "enabled": false
+        }
+      ]
+    },
+    {
+      "type": "log.activity",
+      "name": "Activity Logging",
+      "description": "Log activities in the system",
+      "enabled": true,
+      "config": {
+        "level": "info",
+        "includeDetails": true,
+        "retention": "90days",
+        "alertOnError": false
+      },
+      "actions": [
+        {
+          "type": "user.created",
+          "name": "User Created",
+          "description": "When a new user is created in the system",
+          "config": {
+            "includeUserDetails": true,
+            "notifyAdmin": true,
+            "welcomeNewUser": true,
+            "template": "user-created",
+            "subject": "New User Created"
+          },
+          "enabled": false
+        },
+        {
+          "type": "user.updated",
+          "name": "User Updated",
+          "description": "When a user profile is updated",
+          "config": {
+            "includeUserDetails": true,
+            "notifyAdmin": true,
+            "highlightChanges": true,
+            "template": "user-updated",
+            "subject": "User Profile Updated"
+          },
+          "enabled": false
+        },
+        {
+          "type": "user.deleted",
+          "name": "User Deleted",
+          "description": "When a user is deleted from the system",
+          "config": {
+            "includeUserDetails": true,
+            "notifyAdmin": true,
+            "requestFeedback": true,
+            "template": "user-deleted",
+            "subject": "User Account Deleted"
+          },
+          "enabled": false
+        },
+        {
+          "type": "user.created",
+          "name": "User Created",
+          "description": "When a new user is created in the system",
+          "config": {
+            "includeUserDetails": true,
+            "notifyAdmin": true,
+            "welcomeNewUser": true,
+            "template": "user-created",
+            "subject": "New User Created"
           },
           "enabled": true
         },
         {
-          "type": "notification.email",
-          "name": "Email Notification",
-          "description": "Send an email notification",
+          "type": "user.updated",
+          "name": "User Updated",
+          "description": "When a user profile is updated",
           "config": {
-            "template": "default",
-            "recipients": [],
-            "ccRecipients": [],
-            "subject": "",
-            "includeDetails": true
+            "includeUserDetails": true,
+            "notifyAdmin": true,
+            "highlightChanges": true,
+            "template": "user-updated",
+            "subject": "User Profile Updated"
           },
           "enabled": true
         },
         {
-          "type": "webhook.trigger",
-          "name": "Trigger Webhook",
-          "description": "Send data to an external webhook",
+          "type": "user.deleted",
+          "name": "User Deleted",
+          "description": "When a user is deleted from the system",
           "config": {
-            "url": "",
-            "method": "POST",
-            "headers": {},
-            "includeFullPayload": true
+            "includeUserDetails": true,
+            "notifyAdmin": true,
+            "requestFeedback": true,
+            "template": "user-deleted",
+            "subject": "User Account Deleted"
+          },
+          "enabled": true
+        },
+        {
+          "type": "payment.received",
+          "name": "Payment Received",
+          "description": "When a payment is successfully processed",
+          "config": {
+            "includePaymentDetails": true,
+            "sendReceipt": true,
+            "template": "payment-received",
+            "subject": "Payment Received"
+          },
+          "enabled": true
+        },
+        {
+          "type": "payment.refunded",
+          "name": "Payment Refunded",
+          "description": "When a payment is refunded",
+          "config": {
+            "includeRefundDetails": true,
+            "sendRefundConfirmation": true,
+            "template": "payment-refunded",
+            "subject": "Payment Refunded"
+          },
+          "enabled": true
+        },
+        {
+          "type": "login.success",
+          "name": "Successful Login",
+          "description": "When a user successfully logs in",
+          "config": {
+            "includeDeviceInfo": true,
+            "includeLocationInfo": true,
+            "template": "login-success",
+            "subject": "New Login to Your Account"
+          },
+          "enabled": true
+        },
+        {
+          "type": "login.failed",
+          "name": "Failed Login Attempt",
+          "description": "When a login attempt fails",
+          "config": {
+            "includeAttemptDetails": true,
+            "includeLocationInfo": true,
+            "template": "login-failed",
+            "subject": "Failed Login Attempt"
+          },
+          "enabled": true
+        },
+        {
+          "type": "custom.event",
+          "name": "Custom Event",
+          "description": "A custom event defined by the user",
+          "config": {
+            "customMessage": "",
+            "template": "custom",
+            "subject": "Custom Notification"
+          },
+          "enabled": false
+        }
+      ]
+    },
+    {
+      "type": "analytics.track",
+      "name": "Analytics Tracking",
+      "description": "Track events for analytics",
+      "enabled": true,
+      "config": {
+        "eventPrefix": "",
+        "includeUserData": true,
+        "anonymizeIp": false,
+        "customDimensions": {}
+      },
+      "actions": [
+        {
+          "type": "user.created",
+          "name": "User Created",
+          "description": "When a new user is created in the system",
+          "config": {
+            "includeUserDetails": true,
+            "notifyAdmin": true,
+            "welcomeNewUser": true,
+            "template": "user-created",
+            "subject": "New User Created"
+          },
+          "enabled": false
+        },
+        {
+          "type": "user.updated",
+          "name": "User Updated",
+          "description": "When a user profile is updated",
+          "config": {
+            "includeUserDetails": true,
+            "notifyAdmin": true,
+            "highlightChanges": true,
+            "template": "user-updated",
+            "subject": "User Profile Updated"
+          },
+          "enabled": false
+        },
+        {
+          "type": "user.deleted",
+          "name": "User Deleted",
+          "description": "When a user is deleted from the system",
+          "config": {
+            "includeUserDetails": true,
+            "notifyAdmin": true,
+            "requestFeedback": true,
+            "template": "user-deleted",
+            "subject": "User Account Deleted"
+          },
+          "enabled": false
+        },
+        {
+          "type": "custom.event",
+          "name": "Custom Event",
+          "description": "A custom event defined by the user",
+          "config": {
+            "customMessage": "",
+            "template": "custom",
+            "subject": "Custom Notification"
+          },
+          "enabled": false
+        }
+      ]
+    },
+    {
+      "type": "automation.workflow",
+      "name": "Workflow Automation",
+      "description": "Trigger automated workflows",
+      "enabled": false,
+      "config": {
+        "workflowId": "",
+        "inputData": {},
+        "runAsynchronously": true,
+        "priority": "normal"
+      },
+      "actions": [
+        {
+          "type": "user.created",
+          "name": "User Created",
+          "description": "When a new user is created in the system",
+          "config": {
+            "includeUserDetails": true,
+            "notifyAdmin": true,
+            "welcomeNewUser": true,
+            "template": "user-created",
+            "subject": "New User Created"
+          },
+          "enabled": false
+        },
+        {
+          "type": "user.updated",
+          "name": "User Updated",
+          "description": "When a user profile is updated",
+          "config": {
+            "includeUserDetails": true,
+            "notifyAdmin": true,
+            "highlightChanges": true,
+            "template": "user-updated",
+            "subject": "User Profile Updated"
+          },
+          "enabled": false
+        },
+        {
+          "type": "user.deleted",
+          "name": "User Deleted",
+          "description": "When a user is deleted from the system",
+          "config": {
+            "includeUserDetails": true,
+            "notifyAdmin": true,
+            "requestFeedback": true,
+            "template": "user-deleted",
+            "subject": "User Account Deleted"
+          },
+          "enabled": false
+        },
+        {
+          "type": "custom.event",
+          "name": "Custom Event",
+          "description": "A custom event defined by the user",
+          "config": {
+            "customMessage": "",
+            "template": "custom",
+            "subject": "Custom Notification"
           },
           "enabled": false
         }

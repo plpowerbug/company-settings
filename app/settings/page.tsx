@@ -7,11 +7,9 @@ import { getCompanySettings, updateCompanySettings } from "@/lib/settings-action
 import { DynamicSettingsForm } from "@/components/dynamic-settings-form"
 import { companySettingsSchema, personalSettingsSchema } from "@/lib/settings-config"
 import { OperationsSettings } from "@/components/operations-settings"
-import { generateDefaultOperations } from "@/lib/operations-config"
 
 export default function SettingsPage() {
   const [settings, setSettings] = useState(null)
-  const [operations, setOperations] = useState([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -19,17 +17,6 @@ export default function SettingsPage() {
       try {
         const data = await getCompanySettings()
         setSettings(data)
-
-        // Initialize operations if they don't exist
-        if (!data.operations) {
-          const defaultOps = generateDefaultOperations()
-          data.operations = defaultOps
-          await updateCompanySettings(data)
-          setOperations(defaultOps)
-        } else {
-          setOperations(data.operations)
-        }
-
         setLoading(false)
       } catch (error) {
         console.error("Failed to load settings:", error)
@@ -94,7 +81,7 @@ export default function SettingsPage() {
                 schema={personalSettingsSchema}
                 initialData={{
                   preferences: {
-                    theme: "dark",
+                    theme: "system",
                     fontSize: "medium",
                     language: "en",
                     timezone: "America/New_York",
@@ -128,11 +115,7 @@ export default function SettingsPage() {
           </TabsContent>
 
           <TabsContent value="operations" className="mt-6">
-            {loading ? (
-              <SettingsFormSkeleton />
-            ) : (
-              <OperationsSettings operations={operations} onUpdate={() => window.location.reload()} />
-            )}
+            {loading ? <SettingsFormSkeleton /> : <OperationsSettings onUpdate={() => window.location.reload()} />}
           </TabsContent>
         </Tabs>
       </div>

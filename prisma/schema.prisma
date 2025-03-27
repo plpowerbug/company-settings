@@ -1,0 +1,156 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Company {
+  id          Int       @id @default(autoincrement())
+  name        String
+  description String?   @db.Text
+  logo        String?   @db.Text
+  industry    String?
+  foundedYear String?
+  website     String?
+  companySize String?
+  primaryColor String?
+  secondaryColor String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  settings    Settings?
+  operations  Operation[]
+}
+
+model Settings {
+  id                  Int      @id @default(autoincrement())
+  companyId           Int      @unique
+  company             Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  
+  // Notification settings
+  enableNotifications Boolean  @default(false)
+  emailDigestFrequency String  @default("weekly")
+  notifyOnUserSignup  Boolean  @default(true)
+  notifyOnPaymentReceived Boolean @default(true)
+  notifyOnSystemUpdates Boolean @default(true)
+  notifyOnSecurityAlerts Boolean @default(true)
+  marketingEmails     Boolean  @default(false)
+  
+  // Security settings
+  enableTwoFactorAuth Boolean  @default(false)
+  passwordExpiryDays  Int      @default(90)
+  sessionTimeoutMinutes Int    @default(60)
+  ipRestriction       Boolean  @default(false)
+  allowedIpAddresses  String?  @db.Text
+  failedLoginAttempts Int      @default(5)
+  securityLevel       String   @default("medium")
+  
+  // Data settings
+  enableDataSharing   Boolean  @default(false)
+  enableAnalytics     Boolean  @default(true)
+  enableAutoBackup    Boolean  @default(false)
+  dataRetentionPeriod String   @default("1year")
+  backupFrequency     String   @default("daily")
+  backupTime          String?
+  encryptData         Boolean  @default(true)
+  anonymizeUserData   Boolean  @default(false)
+  
+  // Display settings
+  defaultTheme        String   @default("system")
+  enableCustomBranding Boolean @default(false)
+  dateFormat          String   @default("MM/DD/YYYY")
+  timeFormat          String   @default("12hour")
+  defaultLanguage     String   @default("en")
+  defaultTimezone     String   @default("UTC")
+  showWelcomeMessage  Boolean  @default(true)
+  compactMode         Boolean  @default(false)
+  
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+}
+
+model Operation {
+  id          Int       @id @default(autoincrement())
+  type        String    // e.g., "notification.email"
+  name        String
+  description String    @db.Text
+  enabled     Boolean   @default(true)
+  config      Json?     // Channel-specific configuration
+  companyId   Int
+  company     Company   @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  actions     Action[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@unique([companyId, type])
+}
+
+model Action {
+  id          Int       @id @default(autoincrement())
+  type        String    // e.g., "user.created"
+  name        String
+  description String    @db.Text
+  enabled     Boolean   @default(true)
+  config      Json      // Event-specific configuration
+  operationId Int
+  operation   Operation @relation(fields: [operationId], references: [id], onDelete: Cascade)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@unique([operationId, type])
+}
+model User {
+  id        Int          @id @default(autoincrement())
+  email     String       @unique
+  name      String?
+  role      String       @default("user")
+  companyId Int
+  company   Company      @relation(fields: [companyId], references: [id])
+  settings  UserSettings?
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+}
+
+model UserSettings {
+  id                Int      @id @default(autoincrement())
+  userId            Int      @unique
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  // Theme preferences
+  theme             String   @default("system")
+  fontSize          String   @default("medium")
+  highContrast      Boolean  @default(false)
+  reducedMotion     Boolean  @default(false)
+  
+  // Localization
+  language          String   @default("en")
+  timezone          String   @default("UTC")
+  dateFormat        String   @default("MM/DD/YYYY")
+  timeFormat        String   @default("12hour")
+  firstDayOfWeek    String   @default("sunday")
+  
+  // Notification preferences
+  notificationsEnabled Boolean @default(true)
+  emailNotifications   Boolean @default(true)
+  browserNotifications Boolean @default(true)
+  mobileNotifications  Boolean @default(false)
+  
+  // Notification types
+  notifyOnMentions     Boolean @default(true)
+  notifyOnComments     Boolean @default(true)
+  notifyOnUpdates      Boolean @default(false)
+  notifyOnMarketing    Boolean @default(false)
+  
+  // Quiet hours
+  quietHoursEnabled    Boolean @default(false)
+  quietHoursStart      String  @default("22:00")
+  quietHoursEnd        String  @default("07:00")
+  
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+}

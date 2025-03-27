@@ -142,31 +142,208 @@ Operations and actions can be customized in `lib/operations-config.ts`:
 }
 ```
 
-## File Structure
+
+## Project Structure
 
 ```plaintext
-├── app/
-│   ├── api/
-│   │   └── settings/
-│   │       └── route.ts       # API routes for settings
-│   ├── settings/
-│   │   └── page.tsx           # Settings page
-│   ├── layout.tsx
-│   └── page.tsx
-├── components/
-│   ├── company-settings-form.tsx      # Original form implementation
-│   ├── company-settings-page.tsx      # Preview component
-│   ├── dynamic-settings-form.tsx      # Configuration-driven form
-│   ├── operations-settings.tsx        # Operations configuration UI
-│   └── ui/                            # UI components
-├── lib/
-│   ├── operations-config.ts           # Operations configuration
-│   ├── settings-actions.ts            # Server actions for settings
-│   ├── settings-config.ts             # Settings schema definitions
-│   └── settings-schema.ts             # Schema type definitions
-├── data/
-│   └── company-settings.json          # Stored settings (created at runtime)
-└── public/
+company-settings/
+├── app/                    # Next.js App Router
+│   ├── api/                # API Routes
+│   │   ├── actions/        # Action-related endpoints
+│   │   ├── operations/     # Operation-related endpoints
+│   │   └── settings/       # Settings endpoints
+│   ├── settings/           # Settings page
+│   └── page.tsx            # Home page (redirects to settings)
+├── components/             # React components
+│   ├── ui/                 # UI components (shadcn/ui)
+│   ├── company-settings-form.tsx
+│   ├── dynamic-settings-form.tsx
+│   └── operations-settings.tsx
+├── lib/                    # Utility functions and business logic
+│   ├── operations-api.ts   # API client for operations
+│   ├── operations-config.ts # Operation configuration
+│   ├── operations-db.ts    # Database operations
+│   ├── prisma.ts           # Prisma client
+│   ├── settings-actions.ts # Server actions for settings
+│   ├── settings-config.ts  # Settings configuration
+│   └── settings-schema.ts  # Form schemas
+├── prisma/                 # Prisma ORM
+│   ├── schema.prisma       # Database schema
+│   └── seed.ts             # Database seed script
+├── public/                 # Static assets
+├── .env                    # Environment variables
+├── .env.example            # Example environment variables
+├── package.json            # Project dependencies
+└── README.md               # Project documentation
+```
+
+## API Documentation
+
+### Operations API
+
+#### GET /api/operations
+
+- **Description**: Fetch all operations for the company
+- **Response**: Array of operations with their actions
+
+
+#### PATCH /api/operations/[id]
+
+- **Description**: Update an operation
+- **Parameters**:
+
+- `id`: Operation ID
+
+
+
+- **Request Body**:
+
+- `updateType`: Type of update ('toggle', 'config', or general update)
+- `enabled`: Boolean (for toggle updates)
+- `config`: Object (for config updates)
+
+
+
+- **Response**: Updated operation
+
+
+### Actions API
+
+#### POST /api/actions
+
+- **Description**: Add a new action to an operation
+- **Request Body**:
+
+- `operationId`: ID of the operation
+- `action`: Action data
+
+
+
+- **Response**: Created action
+
+
+#### PATCH /api/actions/[id]
+
+- **Description**: Update an action
+- **Parameters**:
+
+- `id`: Action ID
+
+
+
+- **Request Body**:
+
+- `updateType`: Type of update ('toggle' or 'config')
+- `enabled`: Boolean (for toggle updates)
+- `config`: Object (for config updates)
+
+
+
+- **Response**: Updated action
+
+
+#### DELETE /api/actions/[id]
+
+- **Description**: Remove an action
+- **Parameters**:
+
+- `id`: Action ID
+
+
+
+- **Response**: Success message
+
+
+## Data Structure
+
+The application uses a hierarchical data structure:
+
+1. **Company**: The top-level entity that owns operations
+2. **Operation**: Represents a notification channel (email, SMS, etc.)
+3. **Action**: Represents events that trigger notifications through channels
+
+
+Each operation has its own configuration (like email settings) and contains multiple actions. Each action also has its own configuration (like notification content).
+
+## Troubleshooting
+
+### Unique Constraint Error During Seeding
+
+If you encounter a unique constraint error when running the seed script:
+
+```plaintext
+PrismaClientKnownRequestError: Unique constraint failed on the constraint: `Action_operationId_type_key`
+```
+
+Modify your `prisma/seed.ts` file to ensure unique action types per operation:
+
+```typescript
+// Inside the main function
+for (const operation of defaultOperations) {
+  const { actions, ...operationData } = operation
+  
+  // Ensure unique action types by using a Map to deduplicate
+  const uniqueActions = new Map()
+  
+  // Only keep the last action of each type
+  actions.forEach(action => {
+    uniqueActions.set(action.type, action)
+  })
+  
+  // Convert back to array
+  const uniqueActionsArray = Array.from(uniqueActions.values())
+  
+  await prisma.operation.create({
+    data: {
+      ...operationData,
+      companyId: company.id,
+      actions: {
+        create: uniqueActionsArray.map(action => ({
+          type: action.type,
+          name: action.name,
+          description: action.description,
+          enabled: action.enabled,
+          config: action.config
+        }))
+      }
+    }
+  })
+}
+```
+
+### Database Connection Issues
+
+If you're having trouble connecting to the database:
+
+1. Verify your MySQL service is running
+2. Check your `.env` file for correct credentials
+3. Ensure your database user has the necessary permissions
+4. Try running `npx prisma db push` to sync the schema without migrations
+
+
+## Future Enhancements
+
+- User authentication and authorization
+- Multi-tenant support for multiple companies
+- Audit logging for settings changes
+- Notification templates management
+- Integration with actual notification services (SendGrid, Twilio, etc.)
+- User management interface
+
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+
+```plaintext
+
 ```
 
 ## Technologies Used
@@ -183,35 +360,7 @@ Operations and actions can be customized in `lib/operations-config.ts`:
 
 ## Extending the System
 
-### Adding a Database
 
-To replace the JSON file storage with a database:
-
-1. Install your database client (e.g., `@prisma/client`)
-2. Create database models for settings
-3. Update the `settings-actions.ts` file to use the database instead of file storage
-
-
-Example with Prisma:
-
-```typescript
-import { PrismaClient } from '@prisma/client'
-const prisma = new PrismaClient()
-
-export async function getCompanySettings() {
-  return prisma.companySettings.findFirst({
-    where: { id: 1 },
-  })
-}
-
-export async function updateCompanySettings(settings: any) {
-  return prisma.companySettings.upsert({
-    where: { id: 1 },
-    update: settings,
-    create: { id: 1, ...settings },
-  })
-}
-```
 
 ### Adding Authentication
 
